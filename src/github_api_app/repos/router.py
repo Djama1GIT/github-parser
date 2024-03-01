@@ -2,18 +2,11 @@ from datetime import date
 from typing import List, Optional
 
 from fastapi import APIRouter, Query, HTTPException
+from fastapi.openapi.models import Example
 
 from . import schemas
 from .apiclient import fetch_top_repositories, fetch_repo_activity
 from ..logger import logger
-
-# from db import get_async_session
-# from utils.logger import logger
-# from .dependencies import get_ref_repository
-# from .repository import RefRepository
-
-#
-# from utils.utils import fastapi_users
 
 router = APIRouter(
     prefix="/api/repos",
@@ -23,10 +16,12 @@ router = APIRouter(
 
 @router.get('/top100', response_model=List[schemas.Repository])
 async def top100(
-        sorting_method: Optional[str] = Query(
-            "stars",
-            description="Sorting methods: stars, forks, help-wanted-issues, updated"
-        )
+        sorting_method: Optional[str] = Query("stars", openapi_examples={
+            "stars": Example(value="stars"),
+            "forks": Example(value="forks"),
+            "help wanted issues": Example(value="help-wanted-issues"),
+            "updated": Example(value="updated"),
+        })
 ):
     logger.info(f"Received request for top 100 repositories with sorting method: {sorting_method}")
 
