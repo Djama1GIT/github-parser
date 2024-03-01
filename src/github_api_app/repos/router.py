@@ -33,7 +33,7 @@ async def top100(
     return top
 
 
-@router.get('{owner}/{repo}/activity', response_model=List[schemas.RepoActivity])
+@router.get('/{owner}/{repo}/activity', response_model=List[schemas.RepoActivity])
 async def repo_activity(owner: str, repo: str, since: date, until: date):
     logger.info(f"Received request for repository activity for {owner}/{repo} from {since} to {until}")
     activity = await fetch_repo_activity(owner, repo, since, until)
