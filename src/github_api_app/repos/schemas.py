@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class Repository(BaseModel):
-    repo: str = Field(..., description="repository name (full_name in the GitHub API)", example="hello-world")
+    repo: str = Field(..., description="repository name (full_name in the GitHub API)", example="octocat/hello-world")
     owner: str = Field(..., description="repository", example="octocat")
     position_cur: int = Field(..., description="current position in the top", example=1)
     position_prev: int = Field(..., description="previous position in the top", example=2)
