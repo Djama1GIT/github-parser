@@ -1,4 +1,13 @@
 #!/bin/bash
+cd src/github_parser/
+set -e
+set -u
+error_handler() {
+  echo "Error occurred. Exiting."
+  exit 1
+}
+
+trap 'error_handler' ERR
 
 # Check for Yandex Cloud CLI
 if ! command -v yc &>/dev/null; then
@@ -36,6 +45,8 @@ zip -r "$ZIP_PATH" .
 echo "Creating a version of cloud function..."
 
 # Prompt for environment variables
+echo "Enter SERVER_HOST:"
+read SERVER_HOST
 echo "Enter POSTGRES_DB:"
 read POSTGRES_DB
 echo "Enter POSTGRES_USER:"
@@ -47,7 +58,7 @@ read POSTGRES_HOST
 
 yc serverless function version create --function-name="$FUNCTION_NAME" --folder-id "$FOLDER_ID" --runtime python311 \
   --entrypoint parse_github_data.parse_github_data --memory 128m --execution-timeout 600s --source-path "$ZIP_PATH" \
-  --environment POSTGRES_DB="$POSTGRES_DB",POSTGRES_USER="$POSTGRES_USER",POSTGRES_PASSWORD="$POSTGRES_PASSWORD",POSTGRES_HOST="$POSTGRES_HOST"
+  --environment SERVER_HOST="$SERVER_HOST",POSTGRES_DB="$POSTGRES_DB",POSTGRES_USER="$POSTGRES_USER",POSTGRES_PASSWORD="$POSTGRES_PASSWORD",POSTGRES_HOST="$POSTGRES_HOST"
 rm "$ZIP_PATH"
 
 # Check if the service account exists

@@ -60,7 +60,7 @@ def fetch_top_repositories(sorting_method: str = "stars", per_page: int = 100) -
     return repositories
 
 
-def serialize_commits_data_order_by_date(commits_data: dict) -> List[schemas.RepoActivity]:
+def serialize_commits_data_order_by_date(commits_data: List[dict]) -> List[schemas.RepoActivity]:
     activity = {}
 
     for commit in commits_data:

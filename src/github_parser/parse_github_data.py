@@ -5,11 +5,9 @@ import requests
 from datetime import datetime
 from typing import List
 
-HOST = "http://51.250.2.103:8080"
-
 
 def fetch_top_repositories(sorting_method: str) -> List[dict]:
-    url = f"{HOST}/api/repos/top100?sorting_method={sorting_method}"
+    url = f"{os.environ['SERVER_HOST']}/api/repos/top100?sorting_method={sorting_method}"
     headers = {'Accept': 'application/json'}
     try:
         response = requests.get(url, headers=headers)
@@ -22,7 +20,7 @@ def fetch_top_repositories(sorting_method: str) -> List[dict]:
 
 
 def fetch_repo_activity(repo: str, since: str, until: str) -> List[dict]:
-    url = f"{HOST}/api/repos/{repo}/activity?since={since}&until={until}"
+    url = f"{os.environ['SERVER_HOST']}/api/repos/{repo}/activity?since={since}&until={until}"
     headers = {'Accept': 'application/json'}
     try:
         response = requests.get(url, headers=headers)
