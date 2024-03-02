@@ -1,5 +1,23 @@
 version: "3.9"
 services:
+#  db:
+#    image: postgres:15
+#    container_name: github_parser_db
+#    restart: always
+#    ports:
+#      - 5432:5432
+#    env_file:
+#      - .env
+#      - .env-non-dev
+#    volumes:
+#      - db_data:/var/lib/postgresql/data
+#    environment:
+#      - POSTGRES_DB=github-parser
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_HOST=db
+#      - POSTGRES_PORT=5432
+
   redis:
     image: redis:7
     container_name: github_api_app_redis
@@ -29,5 +47,6 @@ services:
       - server_data:/app/data
 
 volumes:
+#  db_data
   redis_data:
   server_data:

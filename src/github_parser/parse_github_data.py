@@ -105,6 +105,19 @@ def get_last_repo_record(repos_id, conn):
     return last_record
 
 
+def update_repo_activity(top_repos, repos_ids, conn):
+    for idx, repo in enumerate(top_repos):
+        last_record = get_last_repo_record(repos_ids[idx], conn)
+        if last_record is None:
+            since = "1970-01-01"
+        else:
+            since = last_record[0].strftime("%Y-%m-%d")
+        until = datetime.now().strftime("%Y-%m-%d")
+
+        activity = fetch_repo_activity(repo['repo'], since, until)
+        save_repo_activity_to_db(repos_ids[idx], activity, conn)
+
+
 def parse_github_data(event, context):
     conn = None
     try:
@@ -120,16 +133,7 @@ def parse_github_data(event, context):
         top_repos = fetch_top_repositories("stars")
         repos_ids = save_repositories_to_db(top_repos, conn)
 
-        for idx, repo in enumerate(top_repos):
-            last_record = get_last_repo_record(repos_ids[idx], conn)
-            if last_record is None:
-                since = "1970-01-01"
-            else:
-                since = last_record[0].strftime("%Y-%m-%d")
-            until = datetime.now().strftime("%Y-%m-%d")
-
-            activity = fetch_repo_activity(repo['repo'], since, until)
-            save_repo_activity_to_db(repos_ids[idx], activity, conn)
+        update_repo_activity(top_repos, repos_ids, conn)
 
     except Exception as e:
         print(f"An error occurred while parsing GitHub data: {e}")
