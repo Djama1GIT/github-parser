@@ -34,7 +34,7 @@ In Swagger, you can view the available endpoints and their parameters, and also 
 pytest .
 ```
 
-## Creating and invoke a cloud function
+## Creating and invoking a cloud function
 <h6>
 It is assumed that you already have a postgresql server running. 
 If this is not the case, you can uncomment the lines in docker-compose.yml and 
