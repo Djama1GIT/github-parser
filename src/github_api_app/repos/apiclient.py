@@ -3,6 +3,7 @@ from datetime import datetime, date
 import requests
 from typing import List
 
+from fastapi import HTTPException
 from fastapi_cache.decorator import cache
 
 from . import schemas
@@ -112,6 +113,8 @@ def fetch_repo_activity(owner: str, repo: str, since: date,
                      f"since: {since}, "
                      f"until: {until}")
         logger.error(response.content)
+        if response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Repository was not found")
         raise Exception(f"Error when executing the request: {response.status_code}")
 
     commits_data = response.json()
