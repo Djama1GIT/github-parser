@@ -1,3 +1,4 @@
+import json
 import os
 import psycopg2
 import requests
@@ -74,7 +75,7 @@ def save_repo_activity_to_db(repo_id: int, activity: List[dict], conn) -> None:
                 VALUES (%s, %s, %s, %s)
                 ON CONFLICT (repo_id, date) DO UPDATE
                 SET commits = EXCLUDED.commits, authors = EXCLUDED.authors;
-            """, (repo_id, date, activity_item['commits'], activity_item['authors']))
+            """, (repo_id, date, activity_item['commits'], json.dumps(activity_item['authors'])))
         conn.commit()
     except Exception as e:
         print(f"An error occurred while saving repo activity to DB: {e}")
